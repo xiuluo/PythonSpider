@@ -20,7 +20,6 @@ def deCode():
         res = r.json()
         if res["status"] == 1 and count < 10:  # 最多请求十次
             return res
-            break
         count += 1
 
 
