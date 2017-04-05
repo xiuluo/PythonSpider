@@ -2,15 +2,18 @@
 # -*- coding:utf-8 -*-
 
 import base64
+import os
 import requests
 import json
+from subprocess import call, Popen
 
 configPath = "D:\Soft\Shadowsocks\gui-config.json"
+ssClientPath = "D:\Soft\Shadowsocks\Shadowsocks.exe"
 
 
 def deCode():
     count = 0
-    #TODO 本地解析二维码
+    # TODO 本地解析二维码
     # 在线解析二维码接口不稳定，粗暴的重复请求来解决
     while True:
         r = requests.post('https://cli.im/Api/Browser/deqr', data={'data': 'http://freess.org/images/servers/jp01.png'})
@@ -40,7 +43,7 @@ def modifyConfigJson():
     with open(configPath, 'r') as f:
         ssConfig = json.load(f)
     ssConfigList = ssConfig["configs"]
-    #TODO 自动添加freess而不只是修改
+    # TODO 自动添加freess而不只是修改
     for data in ssConfigList:
         if data['remarks'] == "freess":
             data['server'] = ssInfo[0]
@@ -52,5 +55,15 @@ def modifyConfigJson():
         json.dump(ssConfig, f, indent=2)
 
 
-modifyConfigJson()
-#TODO 自动重启ss客户端程序
+def restartSSClient():
+    os.system('taskkill /f /im Shadowsocks.exe')
+    Popen(ssClientPath)
+
+
+def main():
+    modifyConfigJson()
+    restartSSClient()
+
+
+if __name__ == "__main__":
+    main()
