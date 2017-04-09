@@ -6,10 +6,14 @@ import os
 import requests
 import json
 from subprocess import call, Popen
+import platform
 
-configPath = "D:\Soft\Shadowsocks\gui-config.json"
+osStr = platform.system()
+if osStr == "Linux":
+    configPath = "/home/shura/Softs/shadowsocks.json"
+else:
+    configPath = "D:\Soft\Shadowsocks\gui-config.json"
 ssClientPath = "D:\Soft\Shadowsocks\Shadowsocks.exe"
-
 
 def deCode():
     count = 0
@@ -41,22 +45,32 @@ def modifyConfigJson():
     # 读取配置文件
     with open(configPath, 'r') as f:
         ssConfig = json.load(f)
-    ssConfigList = ssConfig["configs"]
     # TODO 自动添加freess而不只是修改
-    for data in ssConfigList:
-        if data['remarks'] == "freess":
-            data['server'] = ssInfo[0]
-            data['server_port'] = ssInfo[1]
-            data['password'] = ssInfo[2]
-            data['method'] = ssInfo[3]
-            break
+    if osStr == "Linux":
+        ssConfig['server'] = ssInfo[0]
+        ssConfig['server_port'] = ssInfo[1]
+        ssConfig['password'] = ssInfo[2]
+        ssConfig['method'] = ssInfo[3]
+    else:
+        ssConfigList = ssConfig["configs"]
+        for data in ssConfigList:
+            if data['remarks'] == "freess":
+                data['server'] = ssInfo[0]
+                data['server_port'] = ssInfo[1]
+                data['password'] = ssInfo[2]
+                data['method'] = ssInfo[3]
+                break
     with open(configPath, 'w') as f:
         json.dump(ssConfig, f, indent=2)
 
 
 def restartSSClient():
-    os.system('taskkill /f /im Shadowsocks.exe')
-    Popen(ssClientPath)
+    if osStr == "Linux":
+        os.system('ps -C sslocal -o pid=|xargs kill -9')
+        Popen('sslocal -c /home/shura/Softs/shadowsocks.json', shell=True)
+    else:
+        os.system('taskkill /f /im Shadowsocks.exe')
+        Popen(ssClientPath)
 
 
 def main():
