@@ -32,7 +32,7 @@ headers = {'Accept': 'application/json',
            }
 
 UPD_VERSION_data = {"intf_code": "UPD_VERSION", "params": {"platform": "0"}}  # 查询更新
-LOGIN_data = {"intf_code": "QRY_LOGIN", "params": {"userPhysicalCard": "2014014053", "password": "保密"}}  # 模拟登陆
+LOGIN_data = {"intf_code": "QRY_LOGIN", "params": {"userPhysicalCard": "2014014053", "password": "919695074"}}  # 模拟登陆
 QRY_ADVERT_data = {"intf_code": "QRY_ADVERT", "params": {}}  # 未知。。。
 QRY_NOTICE_data = {"intf_code": "QRY_NOTICE", "params": {"limit": "5"}}  # 系统通知
 QRY_MY_PRE_SEAT_CHECK_data = {"intf_code": "QRY_PRE_SEAT_CHECK", "params": {"userPhysicalCard": "2014014053"}}  # 预约记录查询
@@ -53,13 +53,15 @@ UPD_PRE_SEAT_data = {"intf_code": "UPD_PRE_SEAT",
                                 "endHour": "23:00", "userPhysicalCard": "2014014053"}}  # 抢座！
 
 now_day = datetime.datetime.now().strftime('%Y-%m-%d')
-start_hour = datetime.datetime.now().hour + 1
-
+start_hour = max(datetime.datetime.now().hour + 1, 6)  # 最早只能从6点开始预定
 QRY_PRE_SEAT_CHECK_data['params']['dateStr'] = now_day
 QRY_PRE_ROOM_data['params']['dateStr'] = now_day
 QRY_PRE_SEAT_data['params']['dateStr'] = now_day
 UPD_PRE_SEAT_data['params']['dateStr'] = now_day
-UPD_PRE_SEAT_data['params']['startHour'] = start_hour.__str__() + ':00'
+if start_hour < 10:
+    UPD_PRE_SEAT_data['params']['startHour'] = '0' + start_hour.__str__() + ':00'
+else:
+    UPD_PRE_SEAT_data['params']['startHour'] = start_hour.__str__() + ':00'
 start_hour += 5  # 一次只能预定五个小时的座位
 UPD_PRE_SEAT_data['params']['endHour'] = start_hour.__str__() + ':00'
 
@@ -81,6 +83,9 @@ while True:
     UPD_PRE_SEAT_data['params']['seatNo'] = random_seat
     r = send_post(service_url, headers, 1, UPD_PRE_SEAT_data)
     rs = r.json()
+    if rs['result_code'] == '20008':  # 预定时间不在图书馆开放时间内
+        print r.text
+        break
     if rs['result_code'] == '0' or cnt >= 30:
         print r.text
         break
