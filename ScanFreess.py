@@ -15,16 +15,17 @@ else:
     configPath = "D:\Soft\Shadowsocks\gui-config.json"
 ssClientPath = "D:\Soft\Shadowsocks\Shadowsocks.exe"
 
+
 def deCode():
     count = 0
     # TODO 本地解析二维码
     # 在线解析二维码接口不稳定，粗暴的重复请求来解决
     while True:
+        count += 1
         r = requests.post('https://cli.im/Api/Browser/deqr', data={'data': 'http://freess.org/images/servers/jp02.png'})
         res = r.json()
         if res["status"] == 1 and count < 10:  # 最多请求十次
             return res
-        count += 1
 
 
 def fetchSSInfo():
