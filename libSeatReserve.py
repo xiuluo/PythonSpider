@@ -32,7 +32,7 @@ headers = {'Accept': 'application/json',
            }
 
 UPD_VERSION_data = {"intf_code": "UPD_VERSION", "params": {"platform": "0"}}  # 查询更新
-LOGIN_data = {"intf_code": "QRY_LOGIN", "params": {"userPhysicalCard": "2014014053", "password": "919695074"}}  # 模拟登陆
+LOGIN_data = {"intf_code": "QRY_LOGIN", "params": {"userPhysicalCard": "2014014053", "password": "保密"}}  # 模拟登陆
 QRY_ADVERT_data = {"intf_code": "QRY_ADVERT", "params": {}}  # 未知。。。
 QRY_NOTICE_data = {"intf_code": "QRY_NOTICE", "params": {"limit": "5"}}  # 系统通知
 QRY_MY_PRE_SEAT_CHECK_data = {"intf_code": "QRY_PRE_SEAT_CHECK", "params": {"userPhysicalCard": "2014014053"}}  # 预约记录查询
