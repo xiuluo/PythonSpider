@@ -1,5 +1,5 @@
 language: python
 python:
     - "3.6"
-install: pip install -r requirements.txt
+install: pip install requests
 script: python3 -m unittest ScanFreess_test
