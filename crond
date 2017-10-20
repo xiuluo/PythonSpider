@@ -1,0 +1,1 @@
+0 3 * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#

@@ -19,7 +19,7 @@ def send_post(url, header, timestamp, *json):
 
 
 desk_list = [62, 63, 64, 65, 66, 54, 53, 52, 51, 50, 15, 16, 17, 18, 19, 20, 21, 9, 8, 7, 6, 5, 4]  # 位置不错的桌子
-seat_list = ['A', 'B', 'E', 'F']  # 不喜欢坐中间
+seat_list = ['A', 'C', 'D', 'F']  # 不喜欢坐中间
 
 service_url = 'http://211.70.171.14:9999/tsgintf/main/service'
 headers = {'Accept': 'application/json',
@@ -32,7 +32,7 @@ headers = {'Accept': 'application/json',
            }
 
 UPD_VERSION_data = {"intf_code": "UPD_VERSION", "params": {"platform": "0"}}  # 查询更新
-LOGIN_data = {"intf_code": "QRY_LOGIN", "params": {"userPhysicalCard": "2014014053", "password": "保密"}}  # 模拟登陆
+LOGIN_data = {"intf_code": "QRY_LOGIN", "params": {"userPhysicalCard": "2014014053", "password": "919695074"}}  # 模拟登陆
 QRY_ADVERT_data = {"intf_code": "QRY_ADVERT", "params": {}}  # 未知。。。
 QRY_NOTICE_data = {"intf_code": "QRY_NOTICE", "params": {"limit": "5"}}  # 系统通知
 QRY_MY_PRE_SEAT_CHECK_data = {"intf_code": "QRY_PRE_SEAT_CHECK", "params": {"userPhysicalCard": "2014014053"}}  # 预约记录查询
@@ -66,15 +66,17 @@ start_hour += 5  # 一次只能预定五个小时的座位
 UPD_PRE_SEAT_data['params']['endHour'] = start_hour.__str__() + ':00'
 
 # 开始模拟预约座位
-r = send_post(service_url, headers, 0, UPD_VERSION_data, LOGIN_data)  # 客户端每次打开都要检查更新
+qq = send_post(service_url, headers, 0, UPD_VERSION_data, LOGIN_data)  # 客户端每次打开都要检查更新
+print(qq.text)
 headers['Cookie'] = 'JSESSIONID=' + r.cookies['JSESSIONID']
 headers['X-Requested-With'] = 'io.dcloud.H507AAC9B'
 headers['Accept'] = 'application/json, text/javascript, */*; q=0.01'
 send_post(service_url, headers, 1, QRY_ADVERT_data, QRY_NOTICE_data, QRY_MY_PRE_SEAT_CHECK_data)  # 参考客户端发包顺序，没有实际意义
-send_post(service_url, headers, 2, QRY_PRE_LIBRARY_data, QRY_OPENHOURS_data,
+r = send_post(service_url, headers, 2, QRY_PRE_LIBRARY_data, QRY_OPENHOURS_data,
           QRY_PRE_SEAT_CHECK_data)  # 查询图书馆各个自习室的空间情况
-send_post(service_url, headers, 1, QRY_PRE_ROOM_data, QRY_PRE_SEAT_data)  # 查询选定的自习室(203)以及座位的空闲情况
 
+send_post(service_url, headers, 1, QRY_PRE_ROOM_data, QRY_PRE_SEAT_data)  # 查询选定的自习室(203)以及座位的空闲情况
+print(r.text)
 cnt = 0
 while True:
     cnt += 1
@@ -83,9 +85,9 @@ while True:
     UPD_PRE_SEAT_data['params']['seatNo'] = random_seat
     r = send_post(service_url, headers, 1, UPD_PRE_SEAT_data)
     rs = r.json()
-    if rs['result_code'] == '20008':  # 预定时间不在图书馆开放时间内
-        print r.text
+    if rs['result_code'] == '20008' or '20004':  # 预定时间不在图书馆开放时间内;您已有预约成功记录，不能再次预占
+        print(r.text)
         break
     if rs['result_code'] == '0' or cnt >= 30:
-        print r.text
+        print(r.text)
         break
