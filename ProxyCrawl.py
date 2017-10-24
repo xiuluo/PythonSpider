@@ -8,7 +8,7 @@ def get_ip_list(url, headers):
     soup = BeautifulSoup(web_ip.text, 'lxml')
     ip_set = soup.find_all('tr')
     ip_list = []
-    for i in range(1, len(ip_set)):
+    for i in range(1, min(len(ip_set), 21)):  # 一次最多返回20个IP
         ip_info = ip_set[i]
         tds = ip_info.find_all('td')
         ip_list.append(tds[1].text + ':' + tds[2].text)
