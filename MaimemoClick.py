@@ -14,7 +14,7 @@ if __name__ == '__main__':
     proxy_list = get_proxy_ip()
     succeeded = 0
     ip_count = 0
-    while succeeded < 25 or ip_count <= 200:  # 每天分享上限为20个单词
+    while succeeded < 20 or ip_count < 100:  # 每天分享上限为20个单词
         proxy_ip = get_random_ip(proxy_list)
         ip_count += 1
         try:
