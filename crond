@@ -1,6 +1,2 @@
-0 12 * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
-0 15 * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
-0 18 * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
-0 21 * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
-0 23 * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
-0 2 * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
+10 * * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
+40 * * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#

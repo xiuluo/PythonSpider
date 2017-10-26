@@ -11,9 +11,9 @@ pid += (datetime.datetime.now() - datetime.datetime(2017, 10, 20)).days
 shared_url = 'http://www.maimemo.com/share/page/?uid=' + uid + '&pid=' + str(pid)
 
 if __name__ == '__main__':
-
     proxy_list = get_proxy_ip()
     for proxy_ip in proxy_list:
+        proxy_ip = {'http': 'http://' + proxy_ip}
         try:
             request = requests.get(shared_url, proxies=proxy_ip, timeout=0.1)
         except:
