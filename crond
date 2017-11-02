@@ -1,2 +1,2 @@
-10 * * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
-40 * * * * python /media/AiCard_01/Spider/MaimemoClick.py & #Maimemo#
+0 12 * * * python3 /home/ubuntu/momo/MaimemoClick.py > /home/ubuntu/momo/momo.log
+0 22 * * * python3 /home/ubuntu/momo/MaimemoClick.py > /home/ubuntu/momo/momo.log
